@@ -10,6 +10,11 @@ from .smobot_status import SmobotStatus
 class Smobot:
     """Class for talking with Smobot Locally."""
 
+    # Assumes we're in F, but the API doesn't tell us
+    # what the configuration is.
+    MAX_SETPOINT = 600
+    MIN_SETPOINT = 180
+
     def __init__(self, ip: str):
         """Create the smobot client.
 
@@ -48,7 +53,12 @@ class Smobot:
 
     async def post_setpoint(self, setpoint):
         """Set the setpoint for the smobot."""
-        body = {"setpoint": setpoint}
+
+        if setpoint > Smobot.MAX_SETPOINT or setpoint < Smobot.MIN_SETPOINT:
+            raise ValueError("Setpoint must be within range {} to {}".format(
+                Smobot.MIN_SETPOINT, Smobot.MAX_SETPOINT
+            ))
+
         async with self.session.post(
             self._base_url + "setgrillset", json=body
         ) as response:
