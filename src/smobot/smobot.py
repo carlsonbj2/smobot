@@ -44,7 +44,6 @@ class Smobot:
         """Update the status of your smobot."""
         async with self.session.get(self._base_url + "smobot") as response:
             full_state = await response.json()
-            print(full_state)
             self._status = SmobotStatus(**full_state)
 
     async def post_setpoint(self, setpoint):
