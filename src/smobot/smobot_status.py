@@ -1,9 +1,21 @@
 """Class for smobot status."""
 """Example json: {'time': '00:00:00', 'grl': 22, 'fd1': 999, 'fd2': 999, 'err': 999, 'p': 999, 'i': 999, 'd': 999, 'dpr': 999, 'ld': 1, 'set': 220, 'ds': 0, 'sot': 0, 'kp': 110, 'ki': 50, 'kd': 100, 'flg': 0}"""
 
+from enum import Enum, auto
 
 class SmobotStatus:
     """Class for Smobot status."""
+
+    class DeviceState(Enum):
+        UNKONWN = -1
+        INACTIVE = 0
+        ACTIVE = 1
+
+        @classmethod
+        def _missing_(cls, value):
+            # Log the unknown value if necessary
+            # print(f"Warning: Unknown value '{value}' provided for Color enum.")
+            return cls.UNKNOWN
 
     def __init__(
         self, time, grl, fd1, fd2, err, p, i, d, dpr, ld, set, ds, sot, kp, ki, kd, flg
@@ -20,7 +32,7 @@ class SmobotStatus:
         self.damper_state = dpr
         self.open_lid = ld
         self.grill_setpoint = set
-        self.ds = ds
+        self.device_status = ds
         self.sot = sot
         self.kp = kp
         self.ki = ki
@@ -34,6 +46,10 @@ class SmobotStatus:
     @property
     def food_probe_2(self):
         return None if self._food_probe_2 == 999 else self._food_probe_2
+
+    @property
+    def status(self):
+        return SmobotStatus.DeviceState(self.device_status)
 
     def __repr__(self):
         gr = f"Grill: {self.grill_temperature}"
