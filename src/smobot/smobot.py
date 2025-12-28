@@ -6,6 +6,8 @@ import time
 
 from .smobot_status import SmobotStatus
 
+# This is all based on Firmware version (4), which is the latest
+# available as of 251228
 
 class Smobot:
     """Class for talking with Smobot Locally."""
@@ -25,7 +27,7 @@ class Smobot:
         self._base_url = f"http://{self._ip}/ajax/"
         self._headers = {
             "Accept": "*/*",
-            "Content-Type": "application/json",
+            "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
             "Accept-Encoding": "gzip, deflate",
             "Accept-Language": "en-us",
         }
@@ -59,7 +61,11 @@ class Smobot:
                 Smobot.MIN_SETPOINT, Smobot.MAX_SETPOINT
             ))
 
+        body = {"setpoint": str(setpoint)}
+
+        # Always returns "OK", even if the setpoint was invalid
+        # and coereced down - not JSON.
         async with self.session.post(
-            self._base_url + "setgrillset", json=body
+            self._base_url + "setgrillset", data=body
         ) as response:
-            return await response.json()
+            return await response.text()
