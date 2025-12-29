@@ -61,7 +61,7 @@ class SmobotStatus:
         return None if self._status['food_probe_2'] == 999 else self._status['food_probe_2']
     @property
     def state(self):
-        return SmobotStatus.DeviceState(self.device_state)
+        return DeviceState(self.device_state)
 
     def get(self, key):
         if key in self._status:
