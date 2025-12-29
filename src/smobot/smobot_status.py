@@ -3,20 +3,20 @@
 
 from enum import Enum, auto
 
+class DeviceState(Enum):
+    UNKONWN = -1
+    INACTIVE = 0
+    ACTIVE = 1
+
+    @classmethod
+    def _missing_(cls, value):
+        # Log the unknown value if necessary
+        # print(f"Warning: Unknown value '{value}' provided for Color enum.")
+        return cls.UNKNOWN
+
+
 class SmobotStatus:
     """Class for Smobot status."""
-
-    class DeviceState(Enum):
-        UNKONWN = -1
-        INACTIVE = 0
-        ACTIVE = 1
-
-        @classmethod
-        def _missing_(cls, value):
-            # Log the unknown value if necessary
-            # print(f"Warning: Unknown value '{value}' provided for Color enum.")
-            return cls.UNKNOWN
-
     def __init__(
         self, time, grl, fd1, fd2, err, p, i, d, dpr, ld, set, ds, sot, kp, ki, kd, flg
     ):
@@ -43,6 +43,8 @@ class SmobotStatus:
             'ki': ki,
             'kd': kd,
         }
+
+        print(self._status)
 
 
     @property
