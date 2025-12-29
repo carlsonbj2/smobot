@@ -61,6 +61,9 @@ class SmobotStatus:
     def damper(self):
         return self._status['damper'] if self.state == DeviceState.ACTIVE else None
     @property
+    def lid(self):
+        return self._status['lid'] if self.state == DeviceState.ACTIVE else None  
+    @property
     def pid_p(self):
         return self._status['p'] if self.state == DeviceState.ACTIVE else None
     @property
