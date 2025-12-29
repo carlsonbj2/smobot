@@ -50,7 +50,7 @@ class SmobotStatus:
         return self._status['grill_temp']
     @property
     def setpoint(self):
-        return self._status['setpoint']
+        return self._status['setpoint'] if self.state == DeviceState.ACTIVE else None
     @property
     def food_probe_1(self):
         return None if self._status['food_probe_1'] == 999 else self._status['food_probe_1']
@@ -58,10 +58,24 @@ class SmobotStatus:
     def food_probe_2(self):
         return None if self._status['food_probe_2'] == 999 else self._status['food_probe_2']
     @property
+    def damper(self):
+        return self._status['damper'] if self.state == DeviceState.ACTIVE else None
+    @property
+    def pid_p(self):
+        return self._status['p'] if self.state == DeviceState.ACTIVE else None
+    @property
+    def pid_i(self):
+        return self._status['i'] if self.state == DeviceState.ACTIVE else None
+    @property
+    def pid_d(self):
+        return self._status['d'] if self.state == DeviceState.ACTIVE else None
+
+
+    @property
     def state(self):
         return DeviceState(self._status['state'])
 
-    def get(self, key):
+    def raw(self, key):
         if key in self._status:
             return self._status[key]
         
