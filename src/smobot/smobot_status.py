@@ -21,40 +21,48 @@ class SmobotStatus:
         self, time, grl, fd1, fd2, err, p, i, d, dpr, ld, set, ds, sot, kp, ki, kd, flg
     ):
         """Initialize a status."""
-        self.time = time
-        self.grill_temperature = grl
-        self._food_probe_1 = fd1
-        self._food_probe_2 = fd2
-        self.error = err
-        self.p = p
-        self.i = i
-        self.damper_mode = d
-        self.damper_state = dpr
-        self.open_lid = ld
-        self.grill_setpoint = set
-        self.device_status = ds
-        self.sot = sot
-        self.kp = kp
-        self.ki = ki
-        self.kd = kd
-        self.flg = flg
+        
+        self._status = {
+            'time': time,
+            'grill_temp': grl,
+            'setpoint': set,
+            'food_probe_1': fd1,
+            'food_probe_2': fd2,
+            'damper': dpr,
+            'lid': ld,
+            'state': ds,
+            'sot': sot,
+            'flags': flg,
 
+            # PID State/Coeffs
+            'err': err,
+            'p': p,
+            'i': i,
+            'd': d,
+            'kp': kp,
+            'ki': ki,
+            'kd': kd,
+        }
+
+
+    @property
+    def grill_temp(self):
+        return self._status['grill_temp']
+    @property
+    def setpoint(self):
+        return self._status['setpoint']
     @property
     def food_probe_1(self):
-        return None if self._food_probe_1 == 999 else self._food_probe_1
-
+        return None if self._status['food_probe_1'] == 999 else self._status['food_probe_1']
     @property
     def food_probe_2(self):
-        return None if self._food_probe_2 == 999 else self._food_probe_2
-
+        return None if self._status['food_probe_2'] == 999 else self._status['food_probe_2']
     @property
-    def status(self):
-        return SmobotStatus.DeviceState(self.device_status)
+    def state(self):
+        return SmobotStatus.DeviceState(self.device_state)
 
-    def __repr__(self):
-        gr = f"Grill: {self.grill_temperature}"
-        set = f"setpoint: {self.grill_setpoint}"
-        dpr = f", damper mode: {self.damper_mode}, damper state: {self.damper_state}" if self.damper_mode != 999 else ""
-        fp1 = f", food probe 1: {self._food_probe_1}" if self.food_probe_1 else ""
-        fp2 = f", food probe 1: {self._food_probe_2}" if self.food_probe_2 else ""
-        return f"{gr}, {set}{dpr}{fp1}{fp2}"
+    def get(self, key):
+        if key in self._status:
+            return self._status[key]
+        
+        raise ValueError("Requested key ({}) not present in status message".format(key))
