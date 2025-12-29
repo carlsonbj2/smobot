@@ -4,6 +4,9 @@ smobot
 
 Python package to interface with the Smobot_ device using asynchronous http (aiohttp).
 
+> **WARNING: THIS PROJECT HAS NO RELATIONSHIP WITH SMOBOT AND IS EXPERIMENTAL ONLY**
+>
+> **USE AT YOUR OWN RISK**
 
 Description
 ===========
