@@ -44,8 +44,6 @@ class SmobotStatus:
             'kd': kd,
         }
 
-        print(self._status)
-
 
     @property
     def grill_temp(self):
